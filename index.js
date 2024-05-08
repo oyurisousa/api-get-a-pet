@@ -9,10 +9,10 @@ const PetRoutes = require("./routes/PetsRoutes");
 app.use(express.json());
 
 app.use(
-	cors({
-		origin: "http://localhost:3000",
-		credentials: true,
-	})
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  })
 );
 
 app.use(express.static("public"));
