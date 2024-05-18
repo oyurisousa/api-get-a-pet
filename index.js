@@ -4,13 +4,14 @@ const conn = require("./db/conn");
 const app = express();
 const UserRoutes = require("./routes/UserRoutes");
 const PetRoutes = require("./routes/PetsRoutes");
+const env = require("./env");
 
 
 app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: env.CORS_ORIGIN,
     credentials: true,
   })
 );
