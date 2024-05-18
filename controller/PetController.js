@@ -1,10 +1,9 @@
 //helpers
 const getToken = require("../helpers/get-token");
 const getUserByToken = require("../helpers/get-user-by-token");
-const validateId = require("../helpers/validate-id");
-const verifyToken = require("../helpers/verify-token");
 const ObjectId = require("mongoose").Types.ObjectId;
-
+const fs = require('node:fs')
+const path = require('path')
 const Pet = require("../models/Pet");
 
 module.exports = class PetController {
@@ -137,6 +136,14 @@ module.exports = class PetController {
 				return;
 			}
 			await Pet.findByIdAndDelete(id);
+			const basePath = path.join(__dirname, '..', 'public', 'images', 'pets')
+			pet.images.forEach(async (value, index) => {
+				let filePath = path.join(basePath, value);
+				fs.unlink(`${filePath}`, (err) => {
+					if (err) throw err;
+					console.log(`${value} was deleted`);
+				});
+			})
 			res.status(200).json({ message: "remove pet sucessfuly!" });
 			return;
 		} else {
