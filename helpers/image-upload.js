@@ -13,8 +13,8 @@ const imageStorage = multer.diskStorage({
         } else if (req.baseUrl.includes("pets")) {
             folder = "pets"
         }
-
-        cb(null, `public/images/${folder}`)
+        const pathDestination = path.join(__dirname, '..', 'public', 'images', folder)
+        cb(null, pathDestination)
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + String(Math.floor(Math.random() * 1000)) + path.extname(file.originalname)) //34985839475984.jpg

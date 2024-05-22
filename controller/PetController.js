@@ -141,7 +141,6 @@ module.exports = class PetController {
 				let filePath = path.join(basePath, value);
 				fs.unlink(`${filePath}`, (err) => {
 					if (err) throw err;
-					console.log(`${value} was deleted`);
 				});
 			})
 			res.status(200).json({ message: "remove pet sucessfuly!" });
@@ -228,7 +227,6 @@ module.exports = class PetController {
 		}
 
 		updateData.description = description;
-		console.log(req.body);
 		await Pet.findByIdAndUpdate(id, updateData);
 
 		res.status(200).json({ pet: pet, message: "Pet atualizado com sucesso!" });
