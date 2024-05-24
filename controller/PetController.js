@@ -67,7 +67,7 @@ module.exports = class PetController {
 				newPet,
 			});
 		} catch (error) {
-			res.status(500).json({ message: error });
+			res.status(500).json({ aqui: 'sei lá', message: error });
 		}
 	}
 

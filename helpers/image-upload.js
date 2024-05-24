@@ -1,8 +1,9 @@
-const { match } = require("assert")
 const multer = require("multer")
 const path = require("path")
+const fs = require('node:fs')
+const { verifyIfFolderExistsAndCreate } = require("./verify-if-folder-exists-and-create")
 
-//destination to store the images
+
 
 const imageStorage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -10,14 +11,18 @@ const imageStorage = multer.diskStorage({
 
         if (req.baseUrl.includes("users")) {
             folder = "users"
+
         } else if (req.baseUrl.includes("pets")) {
             folder = "pets"
         }
         const pathDestination = path.join(__dirname, '..', 'public', 'images', folder)
+
+        verifyIfFolderExistsAndCreate(path.join(pathDestination))
+
         cb(null, pathDestination)
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + String(Math.floor(Math.random() * 1000)) + path.extname(file.originalname)) //34985839475984.jpg
+        cb(null, Date.now() + String(Math.floor(Math.random() * 1000)) + path.extname(file.originalname))
     }
 })
 
