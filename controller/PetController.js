@@ -227,7 +227,7 @@ module.exports = class PetController {
 		}
 
 		updateData.description = description;
-		await Pet.findByIdAndUpdate(id, updateData);
+		await Pet.findByIdAndUpdate(pet.id, updateData);
 
 		res.status(200).json({ pet: pet, message: "Pet atualizado com sucesso!" });
 	}
