@@ -39,7 +39,7 @@ module.exports = class PetController {
 		}
 
 		//get pet owner
-		const token = getToken(req);
+		const token = await getToken(req);
 		const user = await getUserByToken(token);
 
 		//create the pet
@@ -77,7 +77,7 @@ module.exports = class PetController {
 	}
 
 	static async getAllUserPets(req, res) {
-		const token = getToken(req);
+		const token = await getToken(req);
 		const user = await getUserByToken(token);
 		const myPets = await Pet.find({ "user._id": user._id }).sort("-createdAt");
 		res.status(200).json({
@@ -86,7 +86,7 @@ module.exports = class PetController {
 	}
 
 	static async getAllUserAdoptions(req, res) {
-		const token = getToken(req);
+		const token = await getToken(req);
 		const user = await getUserByToken(token);
 
 		const myPets = await Pet.find({ "adopter._id": user._id }).sort(
@@ -127,7 +127,7 @@ module.exports = class PetController {
 				});
 				return;
 			}
-			const token = getToken(req);
+			const token = await getToken(req);
 			const user = await getUserByToken(token);
 			if (pet.user._id.toString() != user._id.toString()) {
 				res.status(422).json({
@@ -172,7 +172,7 @@ module.exports = class PetController {
 		}
 
 		// check if user registered this pet
-		const token = getToken(req);
+		const token = await getToken(req);
 		const user = await getUserByToken(token);
 
 		if (pet.user._id.toString() != user._id.toString()) {
@@ -244,15 +244,21 @@ module.exports = class PetController {
 			}
 
 			//check if is my pet
-			const token = getToken(req);
+			const token = await getToken(req);
 			const user = await getUserByToken(token);
 
+			console.log(token)
 			if (pet.user._id.equals(user._id)) {
 				res
 					.status(422)
 					.json({ message: "you cannot schedule a pet that you registred!" });
 				return;
 			}
+			/*
+			eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSk9ITiIsImlkIjoiNjY1MjZmZjllZmIzYzllZTM1NmZlY2QzIiwiaWF0IjoxNzE2Njc5MTk1fQ.AtmVFDEfpxX_fyloAusKOdvUko3oYp67KO9hYIWanq4
+
+			eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQ2FybG9zIFl1cmkgQnJpdG8gU291c2EiLCJpZCI6IjY1ZWI2OGJhZDM1ZGM4OWZjOTk1Yzk1NCIsImlhdCI6MTcxMDQzODY1NH0.sdG82Xh7cbRtWi6JAGK5p08sJGY7KaUNribo4uFMgfk
+			 */
 
 			//check if user has already scheduled a visit
 			if (pet.adopter) {
@@ -294,7 +300,7 @@ module.exports = class PetController {
 			return;
 		}
 
-		const token = getToken(req);
+		const token = await getToken(req);
 		const user = await getUserByToken(token);
 		if (!pet.user._id.equals(user._id)) {
 			res.status(422).json({

@@ -101,10 +101,9 @@ module.exports = class UserController {
 
 	static async checkUser(req, res) {
 		let currentUser;
-		console.log(req.headers.authorization);
 		if (req.headers.authorization) {
-			const token = getToken(req);
-			const decoded = jwt.verify(token, env.WORD_SECRET);
+			const token = await getToken(req);
+			const decoded = await jwt.verify(token, env.WORD_SECRET);
 			currentUser = await User.findById(decoded.id);
 
 			currentUser.password = undefined;
@@ -138,7 +137,7 @@ module.exports = class UserController {
 		let user;
 		//validate id
 		if (validateId(id)) {
-			const token = getToken(req);
+			const token = await getToken(req);
 			user = await getUserByToken(token);
 		} else {
 			return res.status(200).json({

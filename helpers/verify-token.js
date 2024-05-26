@@ -1,13 +1,15 @@
 const jwt = require("jsonwebtoken")
 const getToken = require("./get-token")
 const env = require("../env")
-const verifyToken = (req, res, next) => {
-    if (!req.headers.authorization) {
+const verifyToken = async (req, res, next) => {
+    const authHeader = await req.headers
+    console.log(authHeader)
+    if (!authHeader["authorization"]) {
         return res.status(401).json({
             message: "not authorized!"
         })
     }
-    const token = getToken(req)
+    const token = await getToken(req)
     if (!token) {
         return res.status(401).json({
             message: "acess denied!"
@@ -20,7 +22,8 @@ const verifyToken = (req, res, next) => {
         next()
     } catch (error) {
         return res.status(400).json({
-            message: "invalid token"
+            message: "invalid token",
+            error
         })
     }
 
