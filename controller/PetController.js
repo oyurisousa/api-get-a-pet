@@ -247,20 +247,14 @@ module.exports = class PetController {
 			const token = await getToken(req);
 			const user = await getUserByToken(token);
 
-			console.log(token)
+
 			if (pet.user._id.equals(user._id)) {
 				res
 					.status(422)
 					.json({ message: "you cannot schedule a pet that you registred!" });
 				return;
 			}
-			/*
-			eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSk9ITiIsImlkIjoiNjY1MjZmZjllZmIzYzllZTM1NmZlY2QzIiwiaWF0IjoxNzE2Njc5MTk1fQ.AtmVFDEfpxX_fyloAusKOdvUko3oYp67KO9hYIWanq4
 
-			eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQ2FybG9zIFl1cmkgQnJpdG8gU291c2EiLCJpZCI6IjY1ZWI2OGJhZDM1ZGM4OWZjOTk1Yzk1NCIsImlhdCI6MTcxMDQzODY1NH0.sdG82Xh7cbRtWi6JAGK5p08sJGY7KaUNribo4uFMgfk
-			 */
-
-			//check if user has already scheduled a visit
 			if (pet.adopter) {
 				if (pet.adopter._id.equals(user._id)) {
 					res
@@ -277,7 +271,11 @@ module.exports = class PetController {
 				await Pet.findByIdAndUpdate(id, pet);
 				res
 					.status(200)
-					.json({ message: "you scheduled your visit sucessfully!" });
+					.json({
+						message: "you scheduled your visit sucessfully!",
+						pet
+
+					});
 			}
 		} else {
 			res.status(422).json({ message: "invalid id" });
